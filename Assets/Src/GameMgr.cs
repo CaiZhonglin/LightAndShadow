@@ -40,12 +40,9 @@ public class GameMgr : MonoBehaviour {
         FellowHistory.onClick.AddListener(() => {
             Debug.Log("点击人物背景");
             TextAsset FellowAll = Resources.Load<TextAsset>("FellowSkill");
-<<<<<<< HEAD
             JSONObject json = new JSONObject(FellowAll.text);
-=======
             JSONObject lightJson = new JSONObject(FellowAll.text).GetField("lightFellow");
             JSONObject darkJson = new JSONObject(FellowAll.text).GetField("darkFellow");
->>>>>>> commit demo
             GameMenu.gameObject.SetActive(false);
             History.gameObject.SetActive(true);
             Button btnQuit = History.Find("BtnBack").GetComponent<Button>();
@@ -55,8 +52,7 @@ public class GameMgr : MonoBehaviour {
                 History.gameObject.SetActive(false);
                 Debug.Log("点击返回至菜单");
             });
-<<<<<<< HEAD
-            for(int i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 int index = i + 1;
                 string name = "Fellow" + index;
@@ -68,7 +64,8 @@ public class GameMgr : MonoBehaviour {
                     Text fellowName = btnFellow.transform.Find("Text").gameObject.GetComponent<Text>();
                     fellowName.text = FellowInfo.GetField("name").str;
                     Button btn = btnFellow.GetComponent<Button>();
-=======
+                }
+            }
             for (int i = 0; i < 15; i++)
             {
                 int index = i + 1;
@@ -99,15 +96,10 @@ public class GameMgr : MonoBehaviour {
                     Text fellowName = btnDarkFellow.transform.Find("Text").gameObject.GetComponent<Text>();
                     fellowName.text = FellowInfo.GetField("name").str;
                     Button btn = btnDarkFellow.GetComponent<Button>();
->>>>>>> commit demo
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => {
                         ShowFellowInfo(i, FellowInfo);
                     });
-<<<<<<< HEAD
-
-=======
->>>>>>> commit demo
                 }
             }
         });
