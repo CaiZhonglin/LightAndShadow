@@ -7,27 +7,27 @@ Direct3D:
     VRAM:     3072 MB
     Driver:   22.21.13.8514
 Begin MonoManager ReloadAssembly
-Platform assembly: D:\DEMO\demo_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading D:\DEMO\demo_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: D:\DEMO\demo_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading D:\DEMO\demo_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: D:\DEMO\demo_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading D:\DEMO\demo_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: D:\DEMO\demo_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading D:\DEMO\demo_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.024 seconds
-Platform assembly: D:\DEMO\demo_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: D:\DEMO\demo_Data\Managed\System.dll (this message is harmless)
+Platform assembly: D:\LightandShadow光与影Demo\demo_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\LightandShadow光与影Demo\demo_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\LightandShadow光与影Demo\demo_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\LightandShadow光与影Demo\demo_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\LightandShadow光与影Demo\demo_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\LightandShadow光与影Demo\demo_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\LightandShadow光与影Demo\demo_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\LightandShadow光与影Demo\demo_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.020 seconds
+Platform assembly: D:\LightandShadow光与影Demo\demo_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\LightandShadow光与影Demo\demo_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 3.092059 ms
+UnloadTime: 1.684787 ms
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 12fc8 -> priority: 1 
-  Thread -> id: 12fcc -> priority: 1 
-  Thread -> id: 12fd0 -> priority: 1 
-  Thread -> id: 12fd4 -> priority: 1 
+  Thread -> id: 16e78 -> priority: 1 
+  Thread -> id: 16e54 -> priority: 1 
+  Thread -> id: 162a0 -> priority: 1 
+  Thread -> id: 160d4 -> priority: 1 
 点击人物背景
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -184,47 +184,43 @@ name为Fellow16的btnFellow不为空
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-展示第17名英雄的信息
+展示第16名英雄的信息
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 展示第16名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第16名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第16名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第16名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第17名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第17名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第17名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第17名英雄的信息
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+展示第17名英雄的信息
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -239,4 +235,44 @@ name为Fellow16的btnFellow不为空
 点击返回至菜单
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+点击开始游戏
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.849255 ms
+
+Unloading 12 unused Assets to reduce memory usage. Loaded Objects now: 295.
+Total: 0.569254 ms (FindLiveObjects: 0.051783 ms CreateObjectMapping: 0.034643 ms MarkObjects: 0.428490 ms  DeleteObjects: 0.052512 ms)
+
+点击开始游戏
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.588514 ms
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 753.
+Total: 0.468969 ms (FindLiveObjects: 0.033914 ms CreateObjectMapping: 0.018598 ms MarkObjects: 0.401869 ms  DeleteObjects: 0.013857 ms)
+
+点击开始游戏
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.516376 ms
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 295.
+Total: 0.493766 ms (FindLiveObjects: 0.050689 ms CreateObjectMapping: 0.031726 ms MarkObjects: 0.373060 ms  DeleteObjects: 0.037925 ms)
+
+点击开始游戏
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.356082 ms
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 753.
+Total: 0.962735 ms (FindLiveObjects: 0.066005 ms CreateObjectMapping: 0.043760 ms MarkObjects: 0.821242 ms  DeleteObjects: 0.030632 ms)
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameStart : MonoBehaviour {
@@ -17,6 +18,12 @@ public class GameStart : MonoBehaviour {
 	
     void Initialise()
     {
+        Button BtnBack = canvas.Find("Game/BtnBack").gameObject.GetComponent<Button>();
+        BtnBack.onClick.AddListener(() =>
+        {
+            Debug.Log("点击开始游戏");
+            SceneManager.LoadScene("init");
+        });
         DrawChessBoard();
         int[] demoSpot = { 2, 3 };
         spot.Add(demoSpot);
@@ -25,15 +32,15 @@ public class GameStart : MonoBehaviour {
 
     void DrawChessBoard()
     {
-        chessBoard = canvas.Find("Panel/ChessBoard").gameObject;
-        GameObject spot = canvas.Find("Panel/ChessBoard/spot").gameObject;
+        chessBoard = canvas.Find("Game/ChessBoard").gameObject;
+        GameObject spot = canvas.Find("Game/ChessBoard/spot").gameObject;
         canvasPart = canvas.gameObject;
         for(int i = 0; i < 10; i++)
         {
             for(int j = 0; j < 10; j++)
             {
                 string name = "spot" + i + j;
-                GameObject subSpot = FindElementGo(canvasPart, "Panel/ChessBoard/" + name);
+                GameObject subSpot = FindElementGo(canvasPart, "Game/ChessBoard/" + name);
                 if(subSpot == null)
                 {
                     subSpot = GameObject.Instantiate(spot);
@@ -95,7 +102,7 @@ public class GameStart : MonoBehaviour {
             for (int j = 0; j < 10; j++)
             {
                 string name = "spot" + i + j;
-                GameObject subSpot = FindElementGo(canvasPart, "Panel/ChessBoard/" + name);
+                GameObject subSpot = FindElementGo(canvasPart, "Game/ChessBoard/" + name);
                 Button subBtn = subSpot.GetComponent<Button>();
                 int xIndex = i;
                 int yIndex = j;
@@ -125,6 +132,7 @@ public class GameStart : MonoBehaviour {
                         subSpot.transform.Find("player").gameObject.SetActive(false);
                         subBtn.onClick.AddListener(() =>
                         {
+                            DrawPlayer();
                             CleanMapWithoutSingleSpot(x, y);
                         });
 
@@ -141,26 +149,35 @@ public class GameStart : MonoBehaviour {
         GameObject player = FindElementGo(chessBoard, name);
         if (player != null)
         {
-            player.transform.Find("CanGo").gameObject.SetActive(false);
-            player.transform.Find("CannotGo").gameObject.SetActive(false);
             player.transform.Find("player").gameObject.SetActive(false);
         }
-        Button btnPlayer = player.GetComponent<Button>();
-        btnPlayer.onClick.RemoveAllListeners();
+        int[] after = { xAfter, yAfter };
+        spot[0] = after;
+        DrawPlayer();
+        //string name = "spot" + xBefore + yBefore;
+        //GameObject player = FindElementGo(chessBoard, name);
+        //if (player != null)
+        //{
+        //    player.transform.Find("CanGo").gameObject.SetActive(false);
+        //    player.transform.Find("CannotGo").gameObject.SetActive(false);
+        //    player.transform.Find("player").gameObject.SetActive(false);
+        //}
+        //Button btnPlayer = player.GetComponent<Button>();
+        //btnPlayer.onClick.RemoveAllListeners();
 
-        name = "spot" + xAfter + yAfter;
-        player = FindElementGo(chessBoard, name);
-        if (player != null)
-        {
-            player.transform.Find("CanGo").gameObject.SetActive(true);
-            player.transform.Find("CannotGo").gameObject.SetActive(false);
-            player.transform.Find("player").gameObject.SetActive(true);
-        }
-        btnPlayer = player.GetComponent<Button>();
-        btnPlayer.onClick.AddListener(() =>
-        {
-            OnClickPlayer(xAfter, yAfter);
-        });
+        //name = "spot" + xAfter + yAfter;
+        //player = FindElementGo(chessBoard, name);
+        //if (player != null)
+        //{
+        //    player.transform.Find("CanGo").gameObject.SetActive(true);
+        //    player.transform.Find("CannotGo").gameObject.SetActive(false);
+        //    player.transform.Find("player").gameObject.SetActive(true);
+        //}
+        //btnPlayer = player.GetComponent<Button>();
+        //btnPlayer.onClick.AddListener(() =>
+        //{
+        //    OnClickPlayer(xAfter, yAfter);
+        //});
         CleanMapWithoutSingleSpot(xAfter, yAfter);
     }
 
@@ -171,7 +188,7 @@ public class GameStart : MonoBehaviour {
             for (int j = 0; j < 10; j++)
             {
                 string name = "spot" + i + j;
-                GameObject subSpot = FindElementGo(canvasPart, "Panel/ChessBoard/" + name);
+                GameObject subSpot = FindElementGo(canvasPart, "Game/ChessBoard/" + name);
                 Button subBtn = subSpot.GetComponent<Button>();
                 if (subSpot != null)
                 {
@@ -189,6 +206,8 @@ public class GameStart : MonoBehaviour {
             }
         }
     }
+
+
     // Update is called once per frame
     void Update () {
 		
