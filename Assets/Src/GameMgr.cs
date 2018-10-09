@@ -40,7 +40,6 @@ public class GameMgr : MonoBehaviour {
         FellowHistory.onClick.AddListener(() => {
             Debug.Log("点击人物背景");
             TextAsset FellowAll = Resources.Load<TextAsset>("FellowSkill");
-            JSONObject json = new JSONObject(FellowAll.text);
             JSONObject lightJson = new JSONObject(FellowAll.text).GetField("lightFellow");
             JSONObject darkJson = new JSONObject(FellowAll.text).GetField("darkFellow");
             GameMenu.gameObject.SetActive(false);
@@ -52,20 +51,6 @@ public class GameMgr : MonoBehaviour {
                 History.gameObject.SetActive(false);
                 Debug.Log("点击返回至菜单");
             });
-            for (int i = 0; i < 16; i++)
-            {
-                int index = i + 1;
-                string name = "Fellow" + index;
-                GameObject btnFellow = History.Find("FellowList/List/" + name).gameObject;
-                if (btnFellow != null)
-                {
-                    JSONObject FellowInfo = json.GetField(index + "");
-                    Debug.Log(string.Format("name为{0}的btnFellow不为空", name));
-                    Text fellowName = btnFellow.transform.Find("Text").gameObject.GetComponent<Text>();
-                    fellowName.text = FellowInfo.GetField("name").str;
-                    Button btn = btnFellow.GetComponent<Button>();
-                }
-            }
             for (int i = 0; i < 15; i++)
             {
                 int index = i + 1;
