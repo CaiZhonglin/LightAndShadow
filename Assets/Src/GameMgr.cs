@@ -41,7 +41,7 @@ public class GameMgr : MonoBehaviour {
         });
         FellowHistory.onClick.AddListener(() => {
             Debug.Log("点击人物背景");
-            TextAsset FellowAll = Resources.Load<TextAsset>("FellowSkill");
+            TextAsset FellowAll = Resources.Load<TextAsset>("config/FellowSkill");
             JSONObject json = new JSONObject(FellowAll.text);
             JSONObject lightJson = new JSONObject(FellowAll.text).GetField("lightFellow");
             JSONObject darkJson = new JSONObject(FellowAll.text).GetField("darkFellow");
