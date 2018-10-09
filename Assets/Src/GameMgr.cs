@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameMgr : MonoBehaviour {
@@ -24,6 +25,7 @@ public class GameMgr : MonoBehaviour {
     void Start () {
         StartGame.onClick.AddListener(() => {
             Debug.Log("点击开始游戏");
+            SceneManager.LoadScene("game");
         });
         GameIntro.onClick.AddListener(() => {
             Debug.Log("点击游戏介绍");
@@ -40,6 +42,7 @@ public class GameMgr : MonoBehaviour {
         FellowHistory.onClick.AddListener(() => {
             Debug.Log("点击人物背景");
             TextAsset FellowAll = Resources.Load<TextAsset>("FellowSkill");
+            JSONObject json = new JSONObject(FellowAll.text);
             JSONObject lightJson = new JSONObject(FellowAll.text).GetField("lightFellow");
             JSONObject darkJson = new JSONObject(FellowAll.text).GetField("darkFellow");
             GameMenu.gameObject.SetActive(false);
