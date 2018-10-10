@@ -20,13 +20,15 @@ public class GameMgr : MonoBehaviour {
 
     public Transform History;
 
-
+    public FellowData fellow;
     // Use this for initialization
     void Start () {
         StartGame.onClick.AddListener(() => {
             Debug.Log("点击开始游戏");
             SceneManager.LoadScene("game");
         });
+        fellow = new FellowData();
+        fellow.saveFellowInfo();
         GameIntro.onClick.AddListener(() => {
             Debug.Log("点击游戏介绍");
             GameMenu.gameObject.SetActive(false);
@@ -41,10 +43,6 @@ public class GameMgr : MonoBehaviour {
         });
         FellowHistory.onClick.AddListener(() => {
             Debug.Log("点击人物背景");
-            TextAsset FellowAll = Resources.Load<TextAsset>("config/FellowSkill");
-            JSONObject json = new JSONObject(FellowAll.text);
-            JSONObject lightJson = new JSONObject(FellowAll.text).GetField("lightFellow");
-            JSONObject darkJson = new JSONObject(FellowAll.text).GetField("darkFellow");
             GameMenu.gameObject.SetActive(false);
             History.gameObject.SetActive(true);
             Button btnQuit = History.Find("BtnBack").GetComponent<Button>();
@@ -61,15 +59,14 @@ public class GameMgr : MonoBehaviour {
                 GameObject btnLightFellow = History.Find("LightFellowList/List/" + name).gameObject;
                 if (btnLightFellow != null)
                 {
-                    JSONObject FellowInfo = lightJson.GetField(index + "");
                     Debug.Log(string.Format("name为{0}的btnFellow不为空", name));
                     Text fellowName = btnLightFellow.transform.Find("Text").gameObject.GetComponent<Text>();
-                    fellowName.text = FellowInfo.GetField("name").str;
+                    fellowName.text = fellow.getLightFellowByID(index-1).fellowName;
                     Button btn = btnLightFellow.GetComponent<Button>();
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() =>
                     {
-                        ShowFellowInfo(i, FellowInfo);
+                        ShowFellowInfo(i, fellow.getLightFellowByID(index - 1));
                     });
                 }
             }
@@ -79,25 +76,24 @@ public class GameMgr : MonoBehaviour {
                 GameObject btnDarkFellow = History.Find("ShadowFellowList/List/" + name).gameObject;
                 if (btnDarkFellow != null)
                 {
-                    JSONObject FellowInfo = darkJson.GetField(index + "");
                     Debug.Log(string.Format("name为{0}的btnFellow不为空", name));
                     Text fellowName = btnDarkFellow.transform.Find("Text").gameObject.GetComponent<Text>();
-                    fellowName.text = FellowInfo.GetField("name").str;
+                    fellowName.text = fellow.getShadowFellowByID(index - 1).fellowName;
                     Button btn = btnDarkFellow.GetComponent<Button>();
                     btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => {
-                        ShowFellowInfo(i, FellowInfo);
+                        ShowFellowInfo(i, fellow.getShadowFellowByID(index - 1));
                     });
                 }
             }
         });
     }
 
-    void ShowFellowInfo(int i, JSONObject fellowInfo)
+    void ShowFellowInfo(int i, FellowData.fellow fellowInfo)
     {
         Debug.Log("展示第"+(i+1)+"名英雄的信息");
-        string fellowSkill = fellowInfo.GetField("skillIntro").str;
-        string historyIntro = fellowInfo.GetField("HistoryIntro").str;
+        string fellowSkill = fellowInfo.fellowSkillInfo;
+        string historyIntro = fellowInfo.fellowHistory;
         Text FellowSkill = History.Find("FellowHistory/List/FellowSkill").gameObject.GetComponent<Text>();
         Text HistoryIntro = History.Find("FellowHistory/List/HistoryIntro").gameObject.GetComponent<Text>();
         FellowSkill.text = "英雄技能：" + fellowSkill;

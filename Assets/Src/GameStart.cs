@@ -12,12 +12,12 @@ public struct aa
 
 public class GameStart : MonoBehaviour {
 
-    public List<int[]> lightSpot = new List<int[]>();
-    public List<int[]> shadowSpot = new List<int[]>();
+    public List<int[]> lightFellowSpot = new List<int[]>();
+    public List<int[]> shadowFellowSpot = new List<int[]>();
     public Transform canvas;
-    public List<aa> Light;
-
-
+    public List<aa> LightSpot;
+    public List<aa> ShadowSpot;
+    public FellowData fellow;
 
 
 
@@ -41,19 +41,31 @@ public class GameStart : MonoBehaviour {
             SceneManager.LoadScene("init");
         });
 
+        fellow = new FellowData();
+        fellow.saveFellowInfo();
         lightTurn = true;
         ShowTurnMsg();
         DrawChessBoard();
-        int[] demoSpot1 = { 2, 3 };
-        int[] demoSpot2 = { 3, 4 };
-        int[] demoSpot3 = { 8, 9 };
-        int[] demoSpot4 = { 7, 8 };
-        lightSpot.Add(demoSpot1);
-        lightSpot.Add(demoSpot2);
-        shadowSpot.Add(demoSpot3);
-        shadowSpot.Add(demoSpot4);
-        lightFellowNum = lightSpot.Count;
-        shadowFellowNum = shadowSpot.Count;
+        //int[] demoSpot1 = { 2, 3 };
+        //int[] demoSpot2 = { 3, 4 };
+        //int[] demoSpot3 = { 8, 9 };
+        //int[] demoSpot4 = { 7, 8 };
+        //lightSpot.Add(demoSpot1);
+        //lightSpot.Add(demoSpot2);
+        //shadowSpot.Add(demoSpot3);
+        //shadowSpot.Add(demoSpot4);
+        for(int i=0;i < LightSpot.Count; i++)
+        {
+            int[] demoSpot = LightSpot[i].bb;
+            lightFellowSpot.Add(demoSpot);
+        }
+        for (int i = 0; i < ShadowSpot.Count; i++)
+        {
+            int[] demoSpot = ShadowSpot[i].bb;
+            shadowFellowSpot.Add(demoSpot);
+        }
+        lightFellowNum = lightFellowSpot.Count;
+        shadowFellowNum = shadowFellowSpot.Count;
         DrawPlayer();
     }
 
@@ -85,7 +97,9 @@ public class GameStart : MonoBehaviour {
 
     void ShowTurnMsg()
     {
-        Text turn = canvas.Find("Game/GameUI/GrpFrame/Turn").gameObject.GetComponent<Text>();
+        Text turn = canvas.Find("Game/GameUI/GrpFrame/List/Turn").gameObject.GetComponent<Text>();
+        Text fellowName = canvas.Find("Game/GameUI/GrpFrame/List/FellowName").gameObject.GetComponent<Text>();
+        Text skill = canvas.Find("Game/GameUI/GrpFrame/List/Skill").gameObject.GetComponent<Text>();
         if (lightTurn)
         {
             turn.text = "Light Turn";
@@ -94,7 +108,8 @@ public class GameStart : MonoBehaviour {
         {
             turn.text = "Shadow Turn";
         }
-
+        fellowName.text = "";
+        skill.text = "";
     }
 
     public GameObject FindElementGo(GameObject go, string name)
@@ -124,11 +139,11 @@ public class GameStart : MonoBehaviour {
                 }
             }
         }
-        for(int i = 0; i < lightSpot.Count; i++)
+        for(int i = 0; i < lightFellowSpot.Count; i++)
         {
-            if(lightSpot[i] != null)
+            if(lightFellowSpot[i] != null)
             {
-                int[] playerSpot = lightSpot[i];
+                int[] playerSpot = lightFellowSpot[i];
                 int index = i;
                 Debug.Log("111spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
                 spotState[(playerSpot[0] + "" + playerSpot[1])].FellowType = 1;
@@ -141,7 +156,7 @@ public class GameStart : MonoBehaviour {
                 if (player != null)
                 {
                     Image icon = player.transform.Find("player").gameObject.GetComponent<Image>();
-                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/LightIcon1");
+                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/LightIcon"+ (index+1));
                     player.transform.Find("CannotGo").gameObject.SetActive(false);
                     player.transform.Find("player").gameObject.SetActive(true);
                     Button btnPlayer = player.GetComponent<Button>();
@@ -162,11 +177,11 @@ public class GameStart : MonoBehaviour {
             }
         }
 
-        for (int i = 0; i < shadowSpot.Count; i++)
+        for (int i = 0; i < shadowFellowSpot.Count; i++)
         {
-            if (shadowSpot[i] != null)
+            if (shadowFellowSpot[i] != null)
             {
-                int[] playerSpot2 = shadowSpot[i];
+                int[] playerSpot2 = shadowFellowSpot[i];
                 int index = i;
                 Debug.Log("111spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
                 spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowType = 2;
@@ -179,7 +194,7 @@ public class GameStart : MonoBehaviour {
                 if (player2 != null)
                 {
                     Image icon = player2.transform.Find("player").gameObject.GetComponent<Image>();
-                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/ShadowIcon1");
+                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/ShadowIcon"+ (index + 1));
                     player2.transform.Find("CannotGo").gameObject.SetActive(false);
                     player2.transform.Find("player").gameObject.SetActive(true);
                     Button btnPlayer = player2.GetComponent<Button>();
@@ -203,8 +218,25 @@ public class GameStart : MonoBehaviour {
 
     void OnClickPlayer(int x, int y, int index)
     {
-        int straightSpeed = 3;
-        int curveSpeed = 1;
+        int straightSpeed;
+        int curveSpeed;
+        
+        Text fellowName = canvas.Find("Game/GameUI/GrpFrame/List/FellowName").gameObject.GetComponent<Text>();
+        Text skill = canvas.Find("Game/GameUI/GrpFrame/List/Skill").gameObject.GetComponent<Text>();
+        if (lightTurn)
+        {
+            fellowName.text = fellow.getLightFellowByID(index).fellowName;
+            skill.text = fellow.getLightFellowByID(index).fellowSkillInfo;
+            straightSpeed = fellow.getLightFellowByID(index).straightSpeed;
+            curveSpeed = fellow.getLightFellowByID(index).curveSpeed;
+        }
+        else
+        {
+            fellowName.text = fellow.getShadowFellowByID(index).fellowName;
+            skill.text = fellow.getShadowFellowByID(index).fellowSkillInfo;
+            straightSpeed = fellow.getShadowFellowByID(index).straightSpeed;
+            curveSpeed = fellow.getShadowFellowByID(index).curveSpeed;
+        }
         int xMax = Mathf.Min(x + straightSpeed, 9);
         int xMin = Mathf.Max(x - straightSpeed, 0);
         int yMax = Mathf.Min(y + straightSpeed, 9);
@@ -286,12 +318,12 @@ public class GameStart : MonoBehaviour {
         int killedFellow = spotState[name].FellowId;
         if (lightTurn)
         {
-            shadowSpot[killedFellow] = null;
+            shadowFellowSpot[killedFellow] = null;
             shadowFellowNum--;
         }
         else
         {
-            lightSpot[killedFellow] = null;
+            lightFellowSpot[killedFellow] = null;
             lightFellowNum--;
         }
         OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
@@ -337,11 +369,11 @@ public class GameStart : MonoBehaviour {
         int[] after = { xAfter, yAfter };
         if (lightTurn)
         {
-            lightSpot[index] = after;
+            lightFellowSpot[index] = after;
         }
         else
         {
-            shadowSpot[index] = after;
+            shadowFellowSpot[index] = after;
         }
         lightTurn = !lightTurn;
         ShowTurnMsg();
