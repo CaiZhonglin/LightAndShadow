@@ -4,15 +4,30 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[System.Serializable]
+public struct aa
+{
+    public int[] bb;
+}
+
 public class GameStart : MonoBehaviour {
 
     public List<int[]> lightSpot = new List<int[]>();
-    public List<int[]> ShadowSpot = new List<int[]>();
+    public List<int[]> shadowSpot = new List<int[]>();
     public Transform canvas;
+    public List<aa> Light;
+
+
+
+
+
+
     GameObject canvasPart;
     GameObject chessBoard;
     bool lightTurn = false;
-    Dictionary<string, int> spotState = new Dictionary<string, int>();
+    int lightFellowNum = 0;
+    int shadowFellowNum = 0;
+    Dictionary<string, spotInfo> spotState = new Dictionary<string, spotInfo>();
     // Use this for initialization
     void Start() {
         Initialise();
@@ -29,10 +44,16 @@ public class GameStart : MonoBehaviour {
         lightTurn = true;
         ShowTurnMsg();
         DrawChessBoard();
-        int[] demoSpot = { 2, 3 };
-        int[] demoSpot2 = { 8, 9 };
-        lightSpot.Add(demoSpot);
-        ShadowSpot.Add(demoSpot2);
+        int[] demoSpot1 = { 2, 3 };
+        int[] demoSpot2 = { 3, 4 };
+        int[] demoSpot3 = { 8, 9 };
+        int[] demoSpot4 = { 7, 8 };
+        lightSpot.Add(demoSpot1);
+        lightSpot.Add(demoSpot2);
+        shadowSpot.Add(demoSpot3);
+        shadowSpot.Add(demoSpot4);
+        lightFellowNum = lightSpot.Count;
+        shadowFellowNum = shadowSpot.Count;
         DrawPlayer();
     }
 
@@ -94,78 +115,93 @@ public class GameStart : MonoBehaviour {
                 string defaultSpot = a + "" + b;
                 if (spotState.ContainsKey(defaultSpot))
                 {
-                    spotState[defaultSpot] = 0;
+                    spotState[defaultSpot].FellowType = 0;
                 }
                 else
                 {
-                    spotState.Add(defaultSpot, 0);
+                    spotInfo spot = new spotInfo();
+                    spotState.Add(defaultSpot, spot);
+                }
+            }
+        }
+        for(int i = 0; i < lightSpot.Count; i++)
+        {
+            if(lightSpot[i] != null)
+            {
+                int[] playerSpot = lightSpot[i];
+                int index = i;
+                Debug.Log("111spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
+                spotState[(playerSpot[0] + "" + playerSpot[1])].FellowType = 1;
+                spotState[(playerSpot[0] + "" + playerSpot[1])].FellowId = index;
+                Debug.Log("222spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
+                int x = playerSpot[0];
+                int y = playerSpot[1];
+                string name = "spot" + x + y;
+                GameObject player = FindElementGo(chessBoard, name);
+                if (player != null)
+                {
+                    Image icon = player.transform.Find("player").gameObject.GetComponent<Image>();
+                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/LightIcon1");
+                    player.transform.Find("CannotGo").gameObject.SetActive(false);
+                    player.transform.Find("player").gameObject.SetActive(true);
+                    Button btnPlayer = player.GetComponent<Button>();
+                    if (lightTurn)
+                    {
+                        player.transform.Find("CanGo").gameObject.SetActive(true);
+                        btnPlayer.onClick.AddListener(() =>
+                        {
+                            OnClickPlayer(x, y, index);
+                        });
+                    }
+                    else
+                    {
+                        player.transform.Find("CanGo").gameObject.SetActive(false);
+                        btnPlayer.onClick.RemoveAllListeners();
+                    }
                 }
             }
         }
 
-        int[] playerSpot = lightSpot[0];
-        Debug.Log("111spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
-        spotState[(playerSpot[0] + "" + playerSpot[1])] = 1;
-        Debug.Log("222spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
-        int x = playerSpot[0];
-        int y = playerSpot[1];
-        string name = "spot" + x + y;
-        GameObject player = FindElementGo(chessBoard, name);
-        if (player != null)
+        for (int i = 0; i < shadowSpot.Count; i++)
         {
-            Image icon = player.transform.Find("player").gameObject.GetComponent<Image>();
-            icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/LightIcon1");
-            player.transform.Find("CannotGo").gameObject.SetActive(false);
-            player.transform.Find("player").gameObject.SetActive(true);
-            Button btnPlayer = player.GetComponent<Button>();
-            if (lightTurn)
+            if (shadowSpot[i] != null)
             {
-                player.transform.Find("CanGo").gameObject.SetActive(true);
-                btnPlayer.onClick.AddListener(() =>
+                int[] playerSpot2 = shadowSpot[i];
+                int index = i;
+                Debug.Log("111spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
+                spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowType = 2;
+                spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowId = index;
+                Debug.Log("222spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
+                int x = playerSpot2[0];
+                int y = playerSpot2[1];
+                string name2 = "spot" + x + y;
+                GameObject player2 = FindElementGo(chessBoard, name2);
+                if (player2 != null)
                 {
-                    OnClickPlayer(x, y);
-                });
-            }
-            else
-            {
-                player.transform.Find("CanGo").gameObject.SetActive(false);
-                btnPlayer.onClick.RemoveAllListeners();
+                    Image icon = player2.transform.Find("player").gameObject.GetComponent<Image>();
+                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/ShadowIcon1");
+                    player2.transform.Find("CannotGo").gameObject.SetActive(false);
+                    player2.transform.Find("player").gameObject.SetActive(true);
+                    Button btnPlayer = player2.GetComponent<Button>();
+                    if (!lightTurn)
+                    {
+                        player2.transform.Find("CanGo").gameObject.SetActive(true);
+                        btnPlayer.onClick.AddListener(() =>
+                        {
+                            OnClickPlayer(x, y, index);
+                        });
+                    }
+                    else
+                    {
+                        player2.transform.Find("CanGo").gameObject.SetActive(false);
+                        btnPlayer.onClick.RemoveAllListeners();
+                    }
+                }
             }
         }
-
-        int[] playerSpot2 = ShadowSpot[0];
-        Debug.Log("111spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
-        spotState[((playerSpot2[0] + "" + playerSpot2[1]))] = 2;
-        Debug.Log("222spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
-        int i = playerSpot2[0];
-        int j = playerSpot2[1];
-        string name2 = "spot" + i + j;
-        GameObject player2 = FindElementGo(chessBoard, name2);
-        if (player2 != null)
-        {
-            Image icon = player2.transform.Find("player").gameObject.GetComponent<Image>();
-            icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/ShadowIcon1");
-            player2.transform.Find("CannotGo").gameObject.SetActive(false);
-            player2.transform.Find("player").gameObject.SetActive(true);
-            Button btnPlayer = player2.GetComponent<Button>();
-            if (!lightTurn)
-            {
-                player2.transform.Find("CanGo").gameObject.SetActive(true);
-                btnPlayer.onClick.AddListener(() =>
-                {
-                    OnClickPlayer(i, j);
-                });
-            }
-            else
-            {
-                player2.transform.Find("CanGo").gameObject.SetActive(false);
-                btnPlayer.onClick.RemoveAllListeners();
-            }
-        }
-
     }
 
-    void OnClickPlayer(int x, int y)
+    void OnClickPlayer(int x, int y, int index)
     {
         int straightSpeed = 3;
         int curveSpeed = 1;
@@ -186,9 +222,10 @@ public class GameStart : MonoBehaviour {
                 Button subBtn = subSpot.GetComponent<Button>();
                 int xIndex = i;
                 int yIndex = j;
+                string spotString = xIndex + "" + yIndex;
                 if (subSpot != null)
                 {
-                    if (i == x && j == y)
+                    if (i == x && j == y || (lightTurn && spotState[spotString].FellowType == 1) || (!lightTurn && spotState[spotString].FellowType == 2))
                     {
                         subSpot.transform.Find("CanGo").gameObject.SetActive(false);
                         subSpot.transform.Find("CannotGo").gameObject.SetActive(false);
@@ -203,27 +240,25 @@ public class GameStart : MonoBehaviour {
                         {
                             if (lightTurn)
                             {
-                                string spotString = xIndex + "" + yIndex;
                                 Debug.Log("spotState长度为" + spotState.Count);
-                                if (spotState[spotString] == 2)
+                                if (spotState[spotString].FellowType == 2)
                                 {
-                                    OnKillPlayer(x, y, xIndex, yIndex);
+                                    OnKillPlayer(x, y, xIndex, yIndex, index);
                                 }
-                                else if (spotState[spotString] == 0)
+                                else if (spotState[spotString].FellowType == 0)
                                 {
-                                    OnMovePlayer(x, y, xIndex, yIndex);
+                                    OnMovePlayer(x, y, xIndex, yIndex, index);
                                 }
                             }
                             else
                             {
-                                string spotString = xIndex + "" + yIndex;
-                                if (spotState[spotString] == 1)
+                                if (spotState[spotString].FellowType == 1)
                                 {
-                                    OnKillPlayer(x, y, xIndex, yIndex);
+                                    OnKillPlayer(x, y, xIndex, yIndex, index);
                                 }
-                                else if (spotState[spotString] == 0)
+                                else if (spotState[spotString].FellowType == 0)
                                 {
-                                    OnMovePlayer(x, y, xIndex, yIndex);
+                                    OnMovePlayer(x, y, xIndex, yIndex, index);
                                 }
                             }
                         });
@@ -245,14 +280,33 @@ public class GameStart : MonoBehaviour {
         }
     }
 
-    void OnKillPlayer(int xBefore, int yBefore, int xAfter, int yAfter)
+    void OnKillPlayer(int xBefore, int yBefore, int xAfter, int yAfter, int index)
     {
-        OnFinishGame();
+        string name = xAfter + "" + yAfter;
+        int killedFellow = spotState[name].FellowId;
+        if (lightTurn)
+        {
+            shadowSpot[killedFellow] = null;
+            shadowFellowNum--;
+        }
+        else
+        {
+            lightSpot[killedFellow] = null;
+            lightFellowNum--;
+        }
+        OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+        CheckGameEnd();
     }
-
+    void CheckGameEnd()
+    {
+        if(lightFellowNum == 0 || shadowFellowNum == 0)
+        {
+            OnFinishGame();
+        }
+    }
     void OnFinishGame()
     {
-        if (lightTurn)
+        if (shadowFellowNum == 0)
         {
             GameObject lightWin = FindElementGo(canvasPart, "Game/GameUI/LightWin");
             lightWin.SetActive(true);
@@ -272,7 +326,7 @@ public class GameStart : MonoBehaviour {
     }
 
 
-    void OnMovePlayer(int xBefore, int yBefore, int xAfter, int yAfter)
+    void OnMovePlayer(int xBefore, int yBefore, int xAfter, int yAfter, int index)
     {
         string name = "spot" + xBefore + yBefore;
         GameObject player = FindElementGo(chessBoard, name);
@@ -283,11 +337,11 @@ public class GameStart : MonoBehaviour {
         int[] after = { xAfter, yAfter };
         if (lightTurn)
         {
-            lightSpot[0] = after;
+            lightSpot[index] = after;
         }
         else
         {
-            ShadowSpot[0] = after;
+            shadowSpot[index] = after;
         }
         lightTurn = !lightTurn;
         ShowTurnMsg();
@@ -350,4 +404,9 @@ public class GameStart : MonoBehaviour {
     void Update () {
 		
 	}
+}
+public class spotInfo
+{
+    public int FellowType = 0;//该点是否由英雄及英雄所在阵营 0为无英雄，1为光阵容英雄，2为影阵容英雄
+    public int FellowId = 0;
 }
