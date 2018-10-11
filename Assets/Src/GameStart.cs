@@ -46,7 +46,6 @@ public class GameStart : MonoBehaviour {
         fellow = new FellowData();
         fellow.saveFellowInfo();
         lightTurn = true;
-        ShowTurnMsg();
         DrawChessBoard();
         //int[] demoSpot1 = { 2, 3 };
         //int[] demoSpot2 = { 3, 4 };
@@ -102,6 +101,8 @@ public class GameStart : MonoBehaviour {
         Text turn = canvas.Find("Game/GameUI/GrpFrame/List/Turn").gameObject.GetComponent<Text>();
         Text fellowName = canvas.Find("Game/GameUI/GrpFrame/List/FellowName").gameObject.GetComponent<Text>();
         Text skill = canvas.Find("Game/GameUI/GrpFrame/List/Skill").gameObject.GetComponent<Text>();
+        Text lightValue = canvas.Find("Game/GameUI/GrpFrame/List/LightValueNum").gameObject.GetComponent<Text>();
+        Text shadowValue = canvas.Find("Game/GameUI/GrpFrame/List/ShadowValueNum").gameObject.GetComponent<Text>();
         if (lightTurn)
         {
             turn.text = "Light Turn";
@@ -112,6 +113,8 @@ public class GameStart : MonoBehaviour {
         }
         fellowName.text = "";
         skill.text = "";
+        lightValue.text = "light:"+ LightValueNum + "祭";
+        shadowValue.text = "shadow:" + ShadowValueNum + "祭";
     }
 
     public GameObject FindElementGo(GameObject go, string name)
@@ -212,6 +215,7 @@ public class GameStart : MonoBehaviour {
                 }
             }
         }
+        ShowTurnMsg();
     }
 
     void OnClickPlayer(int x, int y, int index)
@@ -312,20 +316,88 @@ public class GameStart : MonoBehaviour {
             }
         }
     }
-
+    bool CheckCanRevive(int killedFellow)
+    {
+        if (lightTurn)
+        {
+            int valueCost = fellow.getShadowFellowByID(killedFellow).fellowValue;
+            if (ShadowValueNum >= valueCost)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            int valueCost = fellow.getLightFellowByID(killedFellow).fellowValue;
+            if (LightValueNum >= valueCost)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
     void OnKillPlayer(int xBefore, int yBefore, int xAfter, int yAfter, int index)
     {
-        GameObject ReviveCheck = FindElementGo(canvasPart, "Game/GameUI/ReviveCheck");
-        ReviveCheck.SetActive(true);
-        Button btnYes = FindElementGo(ReviveCheck, "BtnYes").GetComponent<Button>();
-        Button btnNo = FindElementGo(ReviveCheck, "Cover").GetComponent<Button>();
         string name = xAfter + "" + yAfter;
-        btnYes.onClick.RemoveAllListeners();
-        btnNo.onClick.RemoveAllListeners();
-        btnYes.onClick.AddListener(() =>
+        int killedFellow = spotState[name].FellowId;
+        bool canRevive = CheckCanRevive(killedFellow);
+        GameObject ReviveCheck = FindElementGo(canvasPart, "Game/GameUI/ReviveCheck");
+        if (canRevive)
+        {
+            ReviveCheck.SetActive(true);
+            Button btnYes = FindElementGo(ReviveCheck, "BtnYes").GetComponent<Button>();
+            Button btnNo = FindElementGo(ReviveCheck, "Cover").GetComponent<Button>();
+            btnYes.onClick.RemoveAllListeners();
+            btnNo.onClick.RemoveAllListeners();
+            btnYes.onClick.AddListener(() =>
+            {
+                ReviveCheck.SetActive(false);
+                if (lightTurn)
+                {
+                    int valueCost = fellow.getShadowFellowByID(killedFellow).fellowValue;
+                    ShadowValueNum = ShadowValueNum - valueCost;
+                    shadowFellowSpot[killedFellow] = null;
+                    shadowFellowNum--;
+                }
+                else
+                {
+                    int valueCost = fellow.getLightFellowByID(killedFellow).fellowValue;
+                    LightValueNum = LightValueNum - valueCost;
+                    lightFellowSpot[killedFellow] = null;
+                    lightFellowNum--;
+                }
+                Debug.Log("OnKillPlayer:lightFellowNum:" + lightFellowNum + " shadowFellowNum" + shadowFellowNum);
+                OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+                CheckGameEnd();
+                ChooseSpotToRevive(killedFellow);
+            });
+            btnNo.onClick.AddListener(() =>
+            {
+                ReviveCheck.SetActive(false);
+                if (lightTurn)
+                {
+                    shadowFellowSpot[killedFellow] = null;
+                    shadowFellowNum--;
+                }
+                else
+                {
+                    lightFellowSpot[killedFellow] = null;
+                    lightFellowNum--;
+                }
+                OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+                CheckGameEnd();
+            });
+        }
+        else
         {
             ReviveCheck.SetActive(false);
-            int killedFellow = spotState[name].FellowId;
             if (lightTurn)
             {
                 shadowFellowSpot[killedFellow] = null;
@@ -336,28 +408,10 @@ public class GameStart : MonoBehaviour {
                 lightFellowSpot[killedFellow] = null;
                 lightFellowNum--;
             }
-            Debug.Log("OnKillPlayer:lightFellowNum:" + lightFellowNum + " shadowFellowNum" + shadowFellowNum);
             OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
             CheckGameEnd();
-            ChooseSpotToRevive(killedFellow);
-        });
-        btnNo.onClick.AddListener(() =>
-        {
-            ReviveCheck.SetActive(false);
-            int killedFellow = spotState[name].FellowId;
-            if (lightTurn)
-            {
-                shadowFellowSpot[killedFellow] = null;
-                shadowFellowNum--;
-            }
-            else
-            {
-                lightFellowSpot[killedFellow] = null;
-                lightFellowNum--;
-            }
-            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
-            CheckGameEnd();
-        });
+        }
+        
     }
     void ChooseSpotToRevive(int id)
     {
@@ -450,7 +504,6 @@ public class GameStart : MonoBehaviour {
             shadowFellowSpot[index] = after;
         }
         lightTurn = !lightTurn;
-        ShowTurnMsg();
         //string name = "spot" + xBefore + yBefore;
         //GameObject player = FindElementGo(chessBoard, name);
         //if (player != null)

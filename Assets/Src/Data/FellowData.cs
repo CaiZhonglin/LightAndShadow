@@ -24,6 +24,7 @@ public class FellowData : MonoBehaviour {
         public string fellowHistory;
         public int straightSpeed;
         public int curveSpeed;
+        public int fellowValue;
     }
     // Use this for initialization
     void Start () {
@@ -54,6 +55,7 @@ public class FellowData : MonoBehaviour {
             subFellow.fellowHistory = FellowInfo.GetField("HistoryIntro").str;
             subFellow.straightSpeed = (int)FellowInfo.GetField("straightSpeed").n;
             subFellow.curveSpeed = (int)FellowInfo.GetField("curveSpeed").n;
+            subFellow.fellowValue = (int)FellowInfo.GetField("valueNum").n;
             lightFellowInfo.Add(subFellow);
         }
         for (int i = 0; i < darkJson.Count; i++)
@@ -67,6 +69,7 @@ public class FellowData : MonoBehaviour {
             subFellow.fellowHistory = FellowInfo.GetField("HistoryIntro").str;
             subFellow.straightSpeed = (int)FellowInfo.GetField("straightSpeed").n;
             subFellow.curveSpeed = (int)FellowInfo.GetField("curveSpeed").n;
+            subFellow.fellowValue = (int)FellowInfo.GetField("valueNum").n;
             shadowFellowInfo.Add(subFellow);
         }
     } 
