@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public struct aa
 {
     public int[] bb;
+
 }
 
 public class GameStart : MonoBehaviour {
@@ -18,7 +19,8 @@ public class GameStart : MonoBehaviour {
     public List<aa> LightSpot;
     public List<aa> ShadowSpot;
     public FellowData fellow;
-
+    public int LightValueNum;
+    public int ShadowValueNum;
 
 
 
@@ -145,10 +147,8 @@ public class GameStart : MonoBehaviour {
             {
                 int[] playerSpot = lightFellowSpot[i];
                 int index = i;
-                Debug.Log("111spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
                 spotState[(playerSpot[0] + "" + playerSpot[1])].FellowType = 1;
                 spotState[(playerSpot[0] + "" + playerSpot[1])].FellowId = index;
-                Debug.Log("222spotState[playerSpot]为" + spotState[(playerSpot[0] + "" + playerSpot[1])]);
                 int x = playerSpot[0];
                 int y = playerSpot[1];
                 string name = "spot" + x + y;
@@ -183,10 +183,8 @@ public class GameStart : MonoBehaviour {
             {
                 int[] playerSpot2 = shadowFellowSpot[i];
                 int index = i;
-                Debug.Log("111spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
                 spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowType = 2;
                 spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowId = index;
-                Debug.Log("222spotState[playerSpot2]为" + spotState[(playerSpot2[0] + "" + playerSpot2[1])]);
                 int x = playerSpot2[0];
                 int y = playerSpot2[1];
                 string name2 = "spot" + x + y;
@@ -272,14 +270,15 @@ public class GameStart : MonoBehaviour {
                         {
                             if (lightTurn)
                             {
-                                Debug.Log("spotState长度为" + spotState.Count);
                                 if (spotState[spotString].FellowType == 2)
                                 {
                                     OnKillPlayer(x, y, xIndex, yIndex, index);
+                                    subBtn.onClick.RemoveAllListeners();
                                 }
                                 else if (spotState[spotString].FellowType == 0)
                                 {
                                     OnMovePlayer(x, y, xIndex, yIndex, index);
+                                    subBtn.onClick.RemoveAllListeners();
                                 }
                             }
                             else
@@ -287,10 +286,12 @@ public class GameStart : MonoBehaviour {
                                 if (spotState[spotString].FellowType == 1)
                                 {
                                     OnKillPlayer(x, y, xIndex, yIndex, index);
+                                    subBtn.onClick.RemoveAllListeners();
                                 }
                                 else if (spotState[spotString].FellowType == 0)
                                 {
                                     OnMovePlayer(x, y, xIndex, yIndex, index);
+                                    subBtn.onClick.RemoveAllListeners();
                                 }
                             }
                         });
@@ -314,20 +315,93 @@ public class GameStart : MonoBehaviour {
 
     void OnKillPlayer(int xBefore, int yBefore, int xAfter, int yAfter, int index)
     {
+        GameObject ReviveCheck = FindElementGo(canvasPart, "Game/GameUI/ReviveCheck");
+        ReviveCheck.SetActive(true);
+        Button btnYes = FindElementGo(ReviveCheck, "BtnYes").GetComponent<Button>();
+        Button btnNo = FindElementGo(ReviveCheck, "Cover").GetComponent<Button>();
         string name = xAfter + "" + yAfter;
-        int killedFellow = spotState[name].FellowId;
-        if (lightTurn)
+        btnYes.onClick.RemoveAllListeners();
+        btnNo.onClick.RemoveAllListeners();
+        btnYes.onClick.AddListener(() =>
         {
-            shadowFellowSpot[killedFellow] = null;
-            shadowFellowNum--;
-        }
-        else
+            ReviveCheck.SetActive(false);
+            int killedFellow = spotState[name].FellowId;
+            if (lightTurn)
+            {
+                shadowFellowSpot[killedFellow] = null;
+                shadowFellowNum--;
+            }
+            else
+            {
+                lightFellowSpot[killedFellow] = null;
+                lightFellowNum--;
+            }
+            Debug.Log("OnKillPlayer:lightFellowNum:" + lightFellowNum + " shadowFellowNum" + shadowFellowNum);
+            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+            CheckGameEnd();
+            ChooseSpotToRevive(killedFellow);
+        });
+        btnNo.onClick.AddListener(() =>
         {
-            lightFellowSpot[killedFellow] = null;
-            lightFellowNum--;
+            ReviveCheck.SetActive(false);
+            int killedFellow = spotState[name].FellowId;
+            if (lightTurn)
+            {
+                shadowFellowSpot[killedFellow] = null;
+                shadowFellowNum--;
+            }
+            else
+            {
+                lightFellowSpot[killedFellow] = null;
+                lightFellowNum--;
+            }
+            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+            CheckGameEnd();
+        });
+    }
+    void ChooseSpotToRevive(int id)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            for(int j = 0; j < 10; j++)
+            {
+                int x = i;
+                int y = j;
+                int[] reviveLocation = { x, y };
+                string name = i + "" +j;
+                Button spot = FindElementGo(canvasPart,"Game/ChessBoard/spot"+name).GetComponent<Button>();
+                GameObject canGo = FindElementGo(canvasPart, "Game/ChessBoard/spot" + name + "/CanGo");
+                GameObject cannotGo = FindElementGo(canvasPart, "Game/ChessBoard/spot" + name + "/CannotGo");
+                if (spotState[name].FellowType == 0)
+                {
+                    spot.onClick.RemoveAllListeners();
+                    spot.onClick.AddListener(() =>
+                    {
+                        if (lightTurn)
+                        {
+                            lightFellowSpot[id] = reviveLocation;
+                            lightFellowNum++;
+                        }
+                        else
+                        {
+                            shadowFellowSpot[id] = reviveLocation;
+                            shadowFellowNum++;
+                        }
+                        Debug.Log("ChooseSpotToRevive:lightFellowNum:" + lightFellowNum+ " shadowFellowNum" + shadowFellowNum);
+                        CleanMap();
+                        DrawPlayer();
+                    });
+                    canGo.SetActive(true);
+                    cannotGo.SetActive(false);
+                }
+                else
+                {
+                    spot.onClick.RemoveAllListeners();
+                    canGo.SetActive(false);
+                    cannotGo.SetActive(true);
+                }
+            }
         }
-        OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
-        CheckGameEnd();
     }
     void CheckGameEnd()
     {
@@ -424,13 +498,32 @@ public class GameStart : MonoBehaviour {
                     {
                         subSpot.transform.Find("CanGo").gameObject.SetActive(false);
                         subSpot.transform.Find("CannotGo").gameObject.SetActive(false);
+                        subSpot.transform.Find("player").gameObject.SetActive(false);
                         subBtn.onClick.RemoveAllListeners();
                     }
                 }
             }
         }
     }
-
+    void CleanMap()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                string name = "spot" + i + j;
+                GameObject subSpot = FindElementGo(canvasPart, "Game/ChessBoard/" + name);
+                Button subBtn = subSpot.GetComponent<Button>();
+                if (subSpot != null)
+                {
+                    subSpot.transform.Find("CanGo").gameObject.SetActive(false);
+                    subSpot.transform.Find("CannotGo").gameObject.SetActive(false);
+                    subSpot.transform.Find("player").gameObject.SetActive(false);
+                    subBtn.onClick.RemoveAllListeners();
+                }
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update () {
