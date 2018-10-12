@@ -25,6 +25,9 @@ public class FellowData : MonoBehaviour {
         public int straightSpeed;
         public int curveSpeed;
         public int fellowValue;
+        public int skillType;//1为额外移动回合
+        public int skillValue;
+        public int skillCount;
     }
     // Use this for initialization
     void Start () {
@@ -56,6 +59,12 @@ public class FellowData : MonoBehaviour {
             subFellow.straightSpeed = (int)FellowInfo.GetField("straightSpeed").n;
             subFellow.curveSpeed = (int)FellowInfo.GetField("curveSpeed").n;
             subFellow.fellowValue = (int)FellowInfo.GetField("valueNum").n;
+            subFellow.skillType = (int)FellowInfo.GetField("skillType").n;
+            subFellow.skillValue = (int)FellowInfo.GetField("skillValue").n;
+            if (subFellow.skillType == 1)
+            {
+                subFellow.skillCount = 1;
+            }
             lightFellowInfo.Add(subFellow);
         }
         for (int i = 0; i < darkJson.Count; i++)
@@ -70,6 +79,12 @@ public class FellowData : MonoBehaviour {
             subFellow.straightSpeed = (int)FellowInfo.GetField("straightSpeed").n;
             subFellow.curveSpeed = (int)FellowInfo.GetField("curveSpeed").n;
             subFellow.fellowValue = (int)FellowInfo.GetField("valueNum").n;
+            subFellow.skillType = (int)FellowInfo.GetField("skillType").n;
+            subFellow.skillValue = (int)FellowInfo.GetField("skillValue").n;
+            if (subFellow.skillType == 1)
+            {
+                subFellow.skillCount = 1;
+            }
             shadowFellowInfo.Add(subFellow);
         }
     } 
@@ -93,6 +108,28 @@ public class FellowData : MonoBehaviour {
         else
         {
             return new fellow();
+        }
+    }
+    public List<fellow> getLightFellowList()
+    {
+        if (lightFellowInfo != null && lightFellowInfo.Count != 0)
+        {
+            return lightFellowInfo;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public List<fellow> getShadowFellowList()
+    {
+        if (shadowFellowInfo != null && shadowFellowInfo.Count != 0)
+        {
+            return shadowFellowInfo;
+        }
+        else
+        {
+            return null;
         }
     }
 }

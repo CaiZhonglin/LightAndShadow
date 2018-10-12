@@ -19,6 +19,8 @@ public class GameStart : MonoBehaviour {
     public List<aa> LightSpot;
     public List<aa> ShadowSpot;
     public FellowData fellow;
+    public List<FellowData.fellow> lightFellowList;
+    public List<FellowData.fellow> shadowFellowList;
     public int LightValueNum;
     public int ShadowValueNum;
 
@@ -45,6 +47,8 @@ public class GameStart : MonoBehaviour {
 
         fellow = new FellowData();
         fellow.saveFellowInfo();
+        lightFellowList = fellow.getLightFellowList();
+        shadowFellowList = fellow.getShadowFellowList();
         lightTurn = true;
         DrawChessBoard();
         //int[] demoSpot1 = { 2, 3 };
@@ -185,9 +189,9 @@ public class GameStart : MonoBehaviour {
             if (shadowFellowSpot[i] != null)
             {
                 int[] playerSpot2 = shadowFellowSpot[i];
-                int index = i;
+                int ClickedPlayerId = i;
                 spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowType = 2;
-                spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowId = index;
+                spotState[(playerSpot2[0] + "" + playerSpot2[1])].FellowId = ClickedPlayerId;
                 int x = playerSpot2[0];
                 int y = playerSpot2[1];
                 string name2 = "spot" + x + y;
@@ -195,7 +199,7 @@ public class GameStart : MonoBehaviour {
                 if (player2 != null)
                 {
                     Image icon = player2.transform.Find("player").gameObject.GetComponent<Image>();
-                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/ShadowIcon"+ (index + 1));
+                    icon.sprite = Resources.Load<Sprite>("UIRes/fellowIcon/ShadowIcon"+ (ClickedPlayerId + 1));
                     player2.transform.Find("CannotGo").gameObject.SetActive(false);
                     player2.transform.Find("player").gameObject.SetActive(true);
                     Button btnPlayer = player2.GetComponent<Button>();
@@ -204,7 +208,7 @@ public class GameStart : MonoBehaviour {
                         player2.transform.Find("CanGo").gameObject.SetActive(true);
                         btnPlayer.onClick.AddListener(() =>
                         {
-                            OnClickPlayer(x, y, index);
+                            OnClickPlayer(x, y, ClickedPlayerId);
                         });
                     }
                     else
@@ -218,7 +222,7 @@ public class GameStart : MonoBehaviour {
         ShowTurnMsg();
     }
 
-    void OnClickPlayer(int x, int y, int index)
+    void OnClickPlayer(int x, int y, int ClickedPlayerId)
     {
         int straightSpeed;
         int curveSpeed;
@@ -227,17 +231,17 @@ public class GameStart : MonoBehaviour {
         Text skill = canvas.Find("Game/GameUI/GrpFrame/List/Skill").gameObject.GetComponent<Text>();
         if (lightTurn)
         {
-            fellowName.text = fellow.getLightFellowByID(index).fellowName;
-            skill.text = fellow.getLightFellowByID(index).fellowSkillInfo;
-            straightSpeed = fellow.getLightFellowByID(index).straightSpeed;
-            curveSpeed = fellow.getLightFellowByID(index).curveSpeed;
+            fellowName.text = lightFellowList[ClickedPlayerId].fellowName;
+            skill.text = lightFellowList[ClickedPlayerId].fellowSkillInfo;
+            straightSpeed = lightFellowList[ClickedPlayerId].straightSpeed;
+            curveSpeed = lightFellowList[ClickedPlayerId].curveSpeed;
         }
         else
         {
-            fellowName.text = fellow.getShadowFellowByID(index).fellowName;
-            skill.text = fellow.getShadowFellowByID(index).fellowSkillInfo;
-            straightSpeed = fellow.getShadowFellowByID(index).straightSpeed;
-            curveSpeed = fellow.getShadowFellowByID(index).curveSpeed;
+            fellowName.text = shadowFellowList[ClickedPlayerId].fellowName;
+            skill.text = shadowFellowList[ClickedPlayerId].fellowSkillInfo;
+            straightSpeed = shadowFellowList[ClickedPlayerId].straightSpeed;
+            curveSpeed = shadowFellowList[ClickedPlayerId].curveSpeed;
         }
         int xMax = Mathf.Min(x + straightSpeed, 9);
         int xMin = Mathf.Max(x - straightSpeed, 0);
@@ -276,12 +280,12 @@ public class GameStart : MonoBehaviour {
                             {
                                 if (spotState[spotString].FellowType == 2)
                                 {
-                                    OnKillPlayer(x, y, xIndex, yIndex, index);
+                                    OnKillPlayer(x, y, xIndex, yIndex, ClickedPlayerId);
                                     subBtn.onClick.RemoveAllListeners();
                                 }
                                 else if (spotState[spotString].FellowType == 0)
                                 {
-                                    OnMovePlayer(x, y, xIndex, yIndex, index);
+                                    OnMovePlayer(x, y, xIndex, yIndex, ClickedPlayerId);
                                     subBtn.onClick.RemoveAllListeners();
                                 }
                             }
@@ -289,12 +293,12 @@ public class GameStart : MonoBehaviour {
                             {
                                 if (spotState[spotString].FellowType == 1)
                                 {
-                                    OnKillPlayer(x, y, xIndex, yIndex, index);
+                                    OnKillPlayer(x, y, xIndex, yIndex, ClickedPlayerId);
                                     subBtn.onClick.RemoveAllListeners();
                                 }
                                 else if (spotState[spotString].FellowType == 0)
                                 {
-                                    OnMovePlayer(x, y, xIndex, yIndex, index);
+                                    OnMovePlayer(x, y, xIndex, yIndex, ClickedPlayerId);
                                     subBtn.onClick.RemoveAllListeners();
                                 }
                             }
@@ -320,7 +324,7 @@ public class GameStart : MonoBehaviour {
     {
         if (lightTurn)
         {
-            int valueCost = fellow.getShadowFellowByID(killedFellow).fellowValue;
+            int valueCost = shadowFellowList[killedFellow].fellowValue;
             if (ShadowValueNum >= valueCost)
             {
                 return true;
@@ -332,7 +336,7 @@ public class GameStart : MonoBehaviour {
         }
         else
         {
-            int valueCost = fellow.getLightFellowByID(killedFellow).fellowValue;
+            int valueCost = lightFellowList[killedFellow].fellowValue;
             if (LightValueNum >= valueCost)
             {
                 return true;
@@ -353,7 +357,7 @@ public class GameStart : MonoBehaviour {
         {
             ReviveCheck.SetActive(true);
             Button btnYes = FindElementGo(ReviveCheck, "BtnYes").GetComponent<Button>();
-            Button btnNo = FindElementGo(ReviveCheck, "Cover").GetComponent<Button>();
+            Button btnNo = FindElementGo(ReviveCheck, "BtnNo").GetComponent<Button>();
             btnYes.onClick.RemoveAllListeners();
             btnNo.onClick.RemoveAllListeners();
             btnYes.onClick.AddListener(() =>
@@ -361,14 +365,14 @@ public class GameStart : MonoBehaviour {
                 ReviveCheck.SetActive(false);
                 if (lightTurn)
                 {
-                    int valueCost = fellow.getShadowFellowByID(killedFellow).fellowValue;
+                    int valueCost = shadowFellowList[killedFellow].fellowValue;
                     ShadowValueNum = ShadowValueNum - valueCost;
                     shadowFellowSpot[killedFellow] = null;
                     shadowFellowNum--;
                 }
                 else
                 {
-                    int valueCost = fellow.getLightFellowByID(killedFellow).fellowValue;
+                    int valueCost = lightFellowList[killedFellow].fellowValue;
                     LightValueNum = LightValueNum - valueCost;
                     lightFellowSpot[killedFellow] = null;
                     lightFellowNum--;
@@ -486,7 +490,7 @@ public class GameStart : MonoBehaviour {
     }
 
 
-    void OnMovePlayer(int xBefore, int yBefore, int xAfter, int yAfter, int index)
+    void OnMovePlayer(int xBefore, int yBefore, int xAfter, int yAfter, int ClickedPlayerId)
     {
         string name = "spot" + xBefore + yBefore;
         GameObject player = FindElementGo(chessBoard, name);
@@ -495,41 +499,93 @@ public class GameStart : MonoBehaviour {
             player.transform.Find("player").gameObject.SetActive(false);
         }
         int[] after = { xAfter, yAfter };
+        bool canUseSkill = false;
         if (lightTurn)
         {
-            lightFellowSpot[index] = after;
+            lightFellowSpot[ClickedPlayerId] = after;
+            if (lightFellowList[ClickedPlayerId].skillCount > 0)
+            {
+                canUseSkill = true;
+            }
         }
         else
         {
-            shadowFellowSpot[index] = after;
+            shadowFellowSpot[ClickedPlayerId] = after;
+            if (shadowFellowList[ClickedPlayerId].skillCount > 0)
+            {
+                canUseSkill = true;
+            }
+        }
+        if (canUseSkill)
+        {
+            CheckCanUseSkill(after, ClickedPlayerId);
         }
         lightTurn = !lightTurn;
-        //string name = "spot" + xBefore + yBefore;
-        //GameObject player = FindElementGo(chessBoard, name);
-        //if (player != null)
-        //{
-        //    player.transform.Find("CanGo").gameObject.SetActive(false);
-        //    player.transform.Find("CannotGo").gameObject.SetActive(false);
-        //    player.transform.Find("player").gameObject.SetActive(false);
-        //}
-        //Button btnPlayer = player.GetComponent<Button>();
-        //btnPlayer.onClick.RemoveAllListeners();
-
-        //name = "spot" + xAfter + yAfter;
-        //player = FindElementGo(chessBoard, name);
-        //if (player != null)
-        //{
-        //    player.transform.Find("CanGo").gameObject.SetActive(true);
-        //    player.transform.Find("CannotGo").gameObject.SetActive(false);
-        //    player.transform.Find("player").gameObject.SetActive(true);
-        //}
-        //btnPlayer = player.GetComponent<Button>();
-        //btnPlayer.onClick.AddListener(() =>
-        //{
-        //    OnClickPlayer(xAfter, yAfter);
-        //});
         CleanMapWithoutSingleSpot(xAfter, yAfter);
         DrawPlayer();
+    }
+
+    void CheckCanUseSkill(int[]after, int ClickedPlayerId)
+    {
+        int skillType;
+        int skillValue;
+        int skillCount;
+        if (lightTurn)
+        {
+            skillType = lightFellowList[ClickedPlayerId].skillType;
+            skillValue = lightFellowList[ClickedPlayerId].skillValue;
+            skillCount = lightFellowList[ClickedPlayerId].skillCount;
+        }
+        else
+        {
+            skillType = shadowFellowList[ClickedPlayerId].skillType;
+            skillValue = shadowFellowList[ClickedPlayerId].skillValue;
+            skillCount = shadowFellowList[ClickedPlayerId].skillCount;
+        }
+        GameObject SkillCheck = FindElementGo(canvasPart, "Game/GameUI/SkillCheck");
+        SkillCheck.SetActive(true);
+        Button btnYes = FindElementGo(SkillCheck, "BtnYes").GetComponent<Button>();
+        Button btnNo = FindElementGo(SkillCheck, "BtnNo").GetComponent<Button>();
+        btnYes.onClick.RemoveAllListeners();
+        btnNo.onClick.RemoveAllListeners();
+        btnYes.onClick.AddListener(() =>
+        {
+            SkillCheck.SetActive(false);
+            if (lightTurn)
+            {
+                int valueCost = shadowFellowList[killedFellow].fellowValue;
+                ShadowValueNum = ShadowValueNum - valueCost;
+                shadowFellowSpot[killedFellow] = null;
+                shadowFellowNum--;
+            }
+            else
+            {
+                int valueCost = lightFellowList[killedFellow].fellowValue;
+                LightValueNum = LightValueNum - valueCost;
+                lightFellowSpot[killedFellow] = null;
+                lightFellowNum--;
+            }
+            Debug.Log("OnKillPlayer:lightFellowNum:" + lightFellowNum + " shadowFellowNum" + shadowFellowNum);
+            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+            CheckGameEnd();
+            ChooseSpotToRevive(killedFellow);
+        });
+        btnNo.onClick.AddListener(() =>
+        {
+            SkillCheck.SetActive(false);
+            if (lightTurn)
+            {
+                shadowFellowSpot[killedFellow] = null;
+                shadowFellowNum--;
+            }
+            else
+            {
+                lightFellowSpot[killedFellow] = null;
+                lightFellowNum--;
+            }
+            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
+            CheckGameEnd();
+        });
     }
 
     void CleanMapWithoutSingleSpot(int x, int y)

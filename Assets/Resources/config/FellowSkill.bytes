@@ -17,6 +17,8 @@
 			"straightSpeed":2,
 			"curveSpeed":2,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"2":
 		{
@@ -33,6 +35,8 @@
 			"straightSpeed":2,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"3":
 		{
@@ -49,6 +53,8 @@
 			"straightSpeed":1,
 			"curveSpeed":2,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"4":
 		{
@@ -65,6 +71,8 @@
 			"straightSpeed":3,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"5":
 		{
@@ -81,6 +89,8 @@
 			"straightSpeed":0,
 			"curveSpeed":3,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"6":
 		{
@@ -97,6 +107,8 @@
 			"straightSpeed":1,
 			"curveSpeed":2,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"7":
 		{
@@ -113,6 +125,8 @@
 			"straightSpeed":3,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"8":
 		{
@@ -129,6 +143,8 @@
 			"straightSpeed":0,
 			"curveSpeed":2,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"9":
 		{
@@ -145,6 +161,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"10":
 		{
@@ -161,6 +179,8 @@
 			"straightSpeed":1,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"11":
 		{
@@ -177,6 +197,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"12":
 		{
@@ -193,6 +215,8 @@
 			"straightSpeed":1,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"13":
 		{
@@ -210,6 +234,8 @@
 			"straightSpeed":2,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"14":
 		{
@@ -226,6 +252,8 @@
 			"straightSpeed":1,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"15":
 		{
@@ -242,6 +270,8 @@
 			"straightSpeed":2,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 	},
 	"darkFellow":
@@ -261,6 +291,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"2":
 		{
@@ -277,6 +309,8 @@
 			"straightSpeed":3,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"3":
 		{
@@ -293,6 +327,8 @@
 			"straightSpeed":2,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"4":
 		{
@@ -309,6 +345,8 @@
 			"straightSpeed":3,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"5":
 		{
@@ -325,6 +363,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"6":
 		{
@@ -341,6 +381,8 @@
 			"straightSpeed":1,
 			"curveSpeed":2,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"7":
 		{
@@ -357,6 +399,8 @@
 			"straightSpeed":0,
 			"curveSpeed":3,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"8":
 		{
@@ -373,6 +417,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"9":
 		{
@@ -388,6 +434,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"10":
 		{
@@ -404,6 +452,8 @@
 			"straightSpeed":1,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"11":
 		{
@@ -420,6 +470,8 @@
 			"straightSpeed":3,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"12":
 		{
@@ -436,6 +488,8 @@
 			"straightSpeed":4,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"13":
 		{
@@ -452,6 +506,8 @@
 			"straightSpeed":2,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"14":
 		{
@@ -468,6 +524,8 @@
 			"straightSpeed":2,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"15":
 		{
@@ -484,6 +542,8 @@
 			"straightSpeed":1,
 			"curveSpeed":1,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 		"16":
 		{
@@ -500,6 +560,8 @@
 			"straightSpeed":2,
 			"curveSpeed":0,
 			"valueNum":2,
+			"skillType":1,
+			"skillValue":2,
 		},
 	},
 }
