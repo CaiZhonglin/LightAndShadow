@@ -16,7 +16,7 @@ public class FellowData : MonoBehaviour {
             return m_Instance;
         }
     }
-    public struct fellow
+    public class fellow
     {
         public bool isLightFellow;
         public string fellowName;
@@ -28,6 +28,17 @@ public class FellowData : MonoBehaviour {
         public int skillType;//1为额外移动回合
         public int skillValue;
         public int skillCount;
+        public int SkillCount
+        {
+            get { return skillCount; }
+            set
+            {
+                if(skillCount != value)
+                {
+                    skillCount = value;
+                }
+            }
+        }
     }
     // Use this for initialization
     void Start () {
@@ -87,7 +98,10 @@ public class FellowData : MonoBehaviour {
             }
             shadowFellowInfo.Add(subFellow);
         }
-    } 
+    }
+
+    
+
     public fellow getLightFellowByID(int id)
     {
         if (lightFellowInfo.Count > id)

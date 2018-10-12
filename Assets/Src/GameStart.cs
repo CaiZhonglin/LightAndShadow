@@ -15,6 +15,8 @@ public class GameStart : MonoBehaviour {
 
     public List<int[]> lightFellowSpot = new List<int[]>();
     public List<int[]> shadowFellowSpot = new List<int[]>();
+    public List<int[]> lightCampSpot = new List<int[]>();
+    public List<int[]> shadowCampSpot = new List<int[]>();
     public Transform canvas;
     public List<aa> LightSpot;
     public List<aa> ShadowSpot;
@@ -23,6 +25,8 @@ public class GameStart : MonoBehaviour {
     public List<FellowData.fellow> shadowFellowList;
     public int LightValueNum;
     public int ShadowValueNum;
+    public List<aa> LightCampSpot;
+    public List<aa> ShadowCampSpot;
 
 
 
@@ -59,7 +63,7 @@ public class GameStart : MonoBehaviour {
         //lightSpot.Add(demoSpot2);
         //shadowSpot.Add(demoSpot3);
         //shadowSpot.Add(demoSpot4);
-        for(int i=0;i < LightSpot.Count; i++)
+        for (int i = 0; i < LightSpot.Count; i++)
         {
             int[] demoSpot = LightSpot[i].bb;
             lightFellowSpot.Add(demoSpot);
@@ -68,6 +72,17 @@ public class GameStart : MonoBehaviour {
         {
             int[] demoSpot = ShadowSpot[i].bb;
             shadowFellowSpot.Add(demoSpot);
+        }
+
+        for (int i = 0; i < LightCampSpot.Count; i++)
+        {
+            int[] demoSpot = LightCampSpot[i].bb;
+            lightCampSpot.Add(demoSpot);
+        }
+        for (int i = 0; i < ShadowCampSpot.Count; i++)
+        {
+            int[] demoSpot = ShadowCampSpot[i].bb;
+            shadowCampSpot.Add(demoSpot);
         }
         lightFellowNum = lightFellowSpot.Count;
         shadowFellowNum = shadowFellowSpot.Count;
@@ -107,6 +122,9 @@ public class GameStart : MonoBehaviour {
         Text skill = canvas.Find("Game/GameUI/GrpFrame/List/Skill").gameObject.GetComponent<Text>();
         Text lightValue = canvas.Find("Game/GameUI/GrpFrame/List/LightValueNum").gameObject.GetComponent<Text>();
         Text shadowValue = canvas.Find("Game/GameUI/GrpFrame/List/ShadowValueNum").gameObject.GetComponent<Text>();
+        Text skillType = canvas.Find("Game/GameUI/GrpFrame/List/SkillType").gameObject.GetComponent<Text>();
+        Text skillValue = canvas.Find("Game/GameUI/GrpFrame/List/SkillValue").gameObject.GetComponent<Text>();
+        Text skillCount = canvas.Find("Game/GameUI/GrpFrame/List/SkillCount").gameObject.GetComponent<Text>();
         if (lightTurn)
         {
             turn.text = "Light Turn";
@@ -117,6 +135,9 @@ public class GameStart : MonoBehaviour {
         }
         fellowName.text = "";
         skill.text = "";
+        skillType.text = "";
+        skillValue.text = "";
+        skillCount.text = "";
         lightValue.text = "light:"+ LightValueNum + "祭";
         shadowValue.text = "shadow:" + ShadowValueNum + "祭";
     }
@@ -132,7 +153,7 @@ public class GameStart : MonoBehaviour {
 
     void DrawPlayer()
     {
-        for (int a = 0; a < 10; a++)
+        for (int a = 0; a < 10; a++) //初始化地图位置
         {
             for (int b = 0; b < 10; b++)
             {
@@ -221,27 +242,52 @@ public class GameStart : MonoBehaviour {
         }
         ShowTurnMsg();
     }
-
-    void OnClickPlayer(int x, int y, int ClickedPlayerId)
+    
+    void OnClickPlayer(int x, int y, int ClickedPlayerId,bool canCancle = true,bool usingSkill = false)//canCancle为此次移动是否可以通过点击其他位置取消，usingSkill为此次移动是否是通过主动技能进行的额外移动
     {
         int straightSpeed;
         int curveSpeed;
         
         Text fellowName = canvas.Find("Game/GameUI/GrpFrame/List/FellowName").gameObject.GetComponent<Text>();
         Text skill = canvas.Find("Game/GameUI/GrpFrame/List/Skill").gameObject.GetComponent<Text>();
+        Text skillType = canvas.Find("Game/GameUI/GrpFrame/List/SkillType").gameObject.GetComponent<Text>();
+        Text skillValue = canvas.Find("Game/GameUI/GrpFrame/List/SkillValue").gameObject.GetComponent<Text>();
+        Text skillCount = canvas.Find("Game/GameUI/GrpFrame/List/SkillCount").gameObject.GetComponent<Text>();
         if (lightTurn)
         {
             fellowName.text = lightFellowList[ClickedPlayerId].fellowName;
             skill.text = lightFellowList[ClickedPlayerId].fellowSkillInfo;
-            straightSpeed = lightFellowList[ClickedPlayerId].straightSpeed;
-            curveSpeed = lightFellowList[ClickedPlayerId].curveSpeed;
+            if (!usingSkill)
+            {
+                straightSpeed = lightFellowList[ClickedPlayerId].straightSpeed;
+                curveSpeed = lightFellowList[ClickedPlayerId].curveSpeed;
+            }
+            else
+            {
+                straightSpeed = lightFellowList[ClickedPlayerId].skillValue;
+                curveSpeed = lightFellowList[ClickedPlayerId].skillValue;
+            }
+            skillType.text = "skillType:" + lightFellowList[ClickedPlayerId].skillType;
+            skillValue.text = "skilValue:" + lightFellowList[ClickedPlayerId].skillValue;
+            skillCount.text = "skillCount:" + lightFellowList[ClickedPlayerId].SkillCount;
         }
         else
         {
             fellowName.text = shadowFellowList[ClickedPlayerId].fellowName;
             skill.text = shadowFellowList[ClickedPlayerId].fellowSkillInfo;
-            straightSpeed = shadowFellowList[ClickedPlayerId].straightSpeed;
-            curveSpeed = shadowFellowList[ClickedPlayerId].curveSpeed;
+            if (!usingSkill)
+            {
+                straightSpeed = shadowFellowList[ClickedPlayerId].straightSpeed;
+                curveSpeed = shadowFellowList[ClickedPlayerId].curveSpeed;
+            }
+            else
+            {
+                straightSpeed = shadowFellowList[ClickedPlayerId].skillValue;
+                curveSpeed = shadowFellowList[ClickedPlayerId].skillValue;
+            }
+            skillType.text = "skillType:" + shadowFellowList[ClickedPlayerId].skillType.ToString();
+            skillValue.text = "skilValue:" + shadowFellowList[ClickedPlayerId].skillValue.ToString();
+            skillCount.text = "skillCount:" + shadowFellowList[ClickedPlayerId].SkillCount.ToString();
         }
         int xMax = Mathf.Min(x + straightSpeed, 9);
         int xMin = Mathf.Max(x - straightSpeed, 0);
@@ -308,18 +354,25 @@ public class GameStart : MonoBehaviour {
                     {
                         subSpot.transform.Find("CanGo").gameObject.SetActive(false);
                         subSpot.transform.Find("CannotGo").gameObject.SetActive(true);
-                        subBtn.onClick.AddListener(() =>
+                        if (canCancle)
                         {
-                            CleanMapWithoutSingleSpot(x, y);
-                            DrawPlayer();
-                        });
-
+                            subBtn.onClick.AddListener(() =>
+                            {
+                                CleanMapWithoutSingleSpot(x, y);
+                                DrawPlayer();
+                            });
+                        }
+                        else
+                        {
+                            subBtn.onClick.RemoveAllListeners();
+                        }
                     }
-
                 }
             }
         }
     }
+
+    
     bool CheckCanRevive(int killedFellow)
     {
         if (lightTurn)
@@ -503,7 +556,7 @@ public class GameStart : MonoBehaviour {
         if (lightTurn)
         {
             lightFellowSpot[ClickedPlayerId] = after;
-            if (lightFellowList[ClickedPlayerId].skillCount > 0)
+            if (lightFellowList[ClickedPlayerId].SkillCount > 0)
             {
                 canUseSkill = true;
             }
@@ -511,7 +564,7 @@ public class GameStart : MonoBehaviour {
         else
         {
             shadowFellowSpot[ClickedPlayerId] = after;
-            if (shadowFellowList[ClickedPlayerId].skillCount > 0)
+            if (shadowFellowList[ClickedPlayerId].SkillCount > 0)
             {
                 canUseSkill = true;
             }
@@ -520,9 +573,12 @@ public class GameStart : MonoBehaviour {
         {
             CheckCanUseSkill(after, ClickedPlayerId);
         }
-        lightTurn = !lightTurn;
-        CleanMapWithoutSingleSpot(xAfter, yAfter);
-        DrawPlayer();
+        else
+        {
+            lightTurn = !lightTurn;
+            CleanMapWithoutSingleSpot(xAfter, yAfter);
+            DrawPlayer();
+        }
     }
 
     void CheckCanUseSkill(int[]after, int ClickedPlayerId)
@@ -534,13 +590,13 @@ public class GameStart : MonoBehaviour {
         {
             skillType = lightFellowList[ClickedPlayerId].skillType;
             skillValue = lightFellowList[ClickedPlayerId].skillValue;
-            skillCount = lightFellowList[ClickedPlayerId].skillCount;
+            skillCount = lightFellowList[ClickedPlayerId].SkillCount;
         }
         else
         {
             skillType = shadowFellowList[ClickedPlayerId].skillType;
             skillValue = shadowFellowList[ClickedPlayerId].skillValue;
-            skillCount = shadowFellowList[ClickedPlayerId].skillCount;
+            skillCount = shadowFellowList[ClickedPlayerId].SkillCount;
         }
         GameObject SkillCheck = FindElementGo(canvasPart, "Game/GameUI/SkillCheck");
         SkillCheck.SetActive(true);
@@ -553,38 +609,39 @@ public class GameStart : MonoBehaviour {
             SkillCheck.SetActive(false);
             if (lightTurn)
             {
-                int valueCost = shadowFellowList[killedFellow].fellowValue;
-                ShadowValueNum = ShadowValueNum - valueCost;
-                shadowFellowSpot[killedFellow] = null;
-                shadowFellowNum--;
+                if (lightFellowList[ClickedPlayerId].SkillCount > 0)
+                {
+                    CleanMap();
+                    DrawPlayer();
+                    OnClickPlayer(after[0],after[1], ClickedPlayerId,false,true);
+                    lightFellowList[ClickedPlayerId].SkillCount = lightFellowList[ClickedPlayerId].SkillCount -1;
+                }
+                else
+                {
+                    Debug.LogError("出问题啦");
+                }
             }
             else
             {
-                int valueCost = lightFellowList[killedFellow].fellowValue;
-                LightValueNum = LightValueNum - valueCost;
-                lightFellowSpot[killedFellow] = null;
-                lightFellowNum--;
+                if (shadowFellowList[ClickedPlayerId].skillCount > 0)
+                {
+                    CleanMap();
+                    DrawPlayer();
+                    OnClickPlayer(after[0], after[1], ClickedPlayerId,false,true);
+                    shadowFellowList[ClickedPlayerId].SkillCount = shadowFellowList[ClickedPlayerId].SkillCount - 1;
+                }
+                else
+                {
+                    Debug.LogError("出问题啦");
+                }
             }
-            Debug.Log("OnKillPlayer:lightFellowNum:" + lightFellowNum + " shadowFellowNum" + shadowFellowNum);
-            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
-            CheckGameEnd();
-            ChooseSpotToRevive(killedFellow);
         });
         btnNo.onClick.AddListener(() =>
         {
             SkillCheck.SetActive(false);
-            if (lightTurn)
-            {
-                shadowFellowSpot[killedFellow] = null;
-                shadowFellowNum--;
-            }
-            else
-            {
-                lightFellowSpot[killedFellow] = null;
-                lightFellowNum--;
-            }
-            OnMovePlayer(xBefore, yBefore, xAfter, yAfter, index);
-            CheckGameEnd();
+            lightTurn = !lightTurn;
+            CleanMap();
+            DrawPlayer();
         });
     }
 
@@ -643,4 +700,5 @@ public class spotInfo
 {
     public int FellowType = 0;//该点是否由英雄及英雄所在阵营 0为无英雄，1为光阵容英雄，2为影阵容英雄
     public int FellowId = 0;
+    public bool burning = false;
 }
